@@ -249,46 +249,48 @@ var $d = (function () {
 
     function Graph(comparator) {
         this.comparator = comparator;
-    };
 
-    function Vertex(val) {
-        this.value = val;
-    };
+        function Vertex(val) {
+            this.value = val;
+        };
 
-    Vertex.prototype.getValue = function () {
-        return this.value;
-    };
+        Vertex.prototype.getValue = function () {
+            return this.value;
+        };
 
-    function Edge(vert1, vert2) {
-        this.vert1 = vert1;
-        this.vert2 = vert2;
-    };
+        function Edge(vert1, vert2) {
+            this.vert1 = vert1;
+            this.vert2 = vert2;
+        };
 
-    function AdjacancyList() {
-        this.adjacancyList = [];
-    };
-    AdjacancyList.prototype.addVertexMap = function (vMap) {
-        this.adjacancyList.push(vMap);
-    };
-    AdjacancyList.prototype.getAdjacentVertexes = function (ver) {
-        var adjacancyList = this.adjacancyList;
-        var adjacentVertexes;
-        for (vMap in adjacancyList) {
-            if (this.comparator(ver.val, vMap.vertex.value) === 0) {
-                adjacentVertexes = vMap.adjacentVertexes;
-                break;
+        function AdjacancyList() {
+            this.adjacancyList = [];
+        };
+        AdjacancyList.prototype.addVertexMap = function (vMap) {
+            this.adjacancyList.push(vMap);
+        };
+        AdjacancyList.prototype.getAdjacentVertexes = function (ver) {
+            var adjacancyList = this.adjacancyList;
+            var adjacentVertexes;
+            for (vMap in adjacancyList) {
+                if (this.comparator(ver.val, vMap.vertex.value) === 0) {
+                    adjacentVertexes = vMap.adjacentVertexes;
+                    break;
+                }
             }
-        }
-        return adjacentVertexes;
+            return adjacentVertexes;
+        };
+
+        function VertexMap(vertex) {
+            this.vertex = vertex;
+            this.adjacentVertexes = [];
+        };
+        VertexMap.prototype.addAdjacentVertex = function (vertex) {
+            this.adjacentVertexes.push(vertex);
+        };
     };
 
-    function VertexMap(vertex) {
-        this.vertex = vertex;
-        this.adjacentVertexes = [];
-    };
-    VertexMap.prototype.addAdjacentVertex = function (vertex) {
-        this.adjacentVertexes.push(vertex);
-    };
+
 
     ds.queue = function () {
         return new Queue();
