@@ -216,4 +216,35 @@ describe("Data Structure Liabrary", function () {
         // expect(stack.peek()).toBe(66);
 
     });
+    it("Create a graph", function () {
+        //Arrange
+
+        //Act
+        var grp = $d(':grp');
+        var vertex5 = grp.createVertex(5);
+        var vertex6 = grp.createVertex(6);
+        var vertex7 = grp.createVertex(7);
+        var vertex8 = grp.createVertex(8);
+        var vertex9 = grp.createVertex(9);
+        var vertex10 = grp.createVertex(10);
+
+
+        grp.addVertex(vertex5);
+        grp.addVertex(vertex6);
+        grp.addVertex(vertex7);
+        grp.addVertex(vertex8);
+        grp.addVertex(vertex9);
+        grp.addVertex(vertex10);
+
+        grp.addEdge(grp.createEdge(vertex5, vertex6));
+        grp.addEdge(grp.createEdge(vertex5, vertex7));
+        grp.addEdge(grp.createEdge(vertex6, vertex8));
+        grp.addEdge(grp.createEdge(vertex8, vertex9));
+        grp.addEdge(grp.createEdge(vertex7, vertex9));
+        grp.addEdge(grp.createEdge(vertex7, vertex10));
+
+        grp.buildGraph();
+        grp.print();
+
+    });
 })

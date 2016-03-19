@@ -9,6 +9,8 @@ var $d = (function () {
             return ds.queue();
         } else if (input === ":bst") {
             return ds.binarySearchTree(additionFn);
+        } else if (input === ":grp") {
+            return ds.graph(additionFn);
         }
     };
 
@@ -247,48 +249,120 @@ var $d = (function () {
         return inorderRes;
     };
 
-    function Graph(comparator) {
-        this.comparator = comparator;
 
-        function Vertex(val) {
-            this.value = val;
-        };
 
-        Vertex.prototype.getValue = function () {
-            return this.value;
-        };
 
-        function Edge(vert1, vert2) {
-            this.vert1 = vert1;
-            this.vert2 = vert2;
-        };
 
-        function AdjacancyList() {
-            this.adjacancyList = [];
-        };
-        AdjacancyList.prototype.addVertexMap = function (vMap) {
-            this.adjacancyList.push(vMap);
-        };
-        AdjacancyList.prototype.getAdjacentVertexes = function (ver) {
-            var adjacancyList = this.adjacancyList;
-            var adjacentVertexes;
-            for (vMap in adjacancyList) {
-                if (this.comparator(ver.val, vMap.vertex.value) === 0) {
-                    adjacentVertexes = vMap.adjacentVertexes;
-                    break;
+    Graph.prototype.addVertex = function (vertex) {
+        this.vertexList.push(vertex);
+    };
+    Graph.prototype.addEdge = function (edge) {
+        this.edgeList.push(edge);
+    };
+
+    Graph.prototype.createVertex = function (vertexVal) {
+        return new Vertex(vertexVal);
+    };
+    Graph.prototype.createEdge = function (vert1, vert2) {
+        return new Edge(vert1, vert2);
+    };
+
+    Graph.prototype.buildGraph = function () {
+        var comparator = this.comparator;
+        for (var ver in this.vertexList) {
+            var vMap = new VertexMap(this.vertexList[ver]);
+            for (var ed in this.edgeList) {
+                var edge = this.edgeList[ed];
+                var vert = this.vertexList[ver];
+                //  console.log(vert.value + ":::" + edge.vert1.value + "--" + edge.vert2.value);
+                if (compare(vert, edge.vert1)) {
+                    console.log(edge.vert1.value + "--" + vert.value);
+                    vMap.addAdjacentVertex(edge.vert2);
                 }
             }
-            return adjacentVertexes;
-        };
+            this.adjacancyList.addVertexMap(vMap);
+        }
 
-        function VertexMap(vertex) {
-            this.vertex = vertex;
-            this.adjacentVertexes = [];
-        };
-        VertexMap.prototype.addAdjacentVertex = function (vertex) {
-            this.adjacentVertexes.push(vertex);
-        };
+        function compare(vert1, vert2) {
+            if (comparator === undefined) {
+                return vert1.value === vert2.value ? true : false;
+            } else {
+                comparator(vert1.value, vert2.value) === 0 ? true : false;
+            }
+        }
     };
+
+    Graph.prototype.print = function () {
+        for (var ver in this.vertexList) {
+            var v = this.vertexList[ver];
+            console.log("vert: " + v.value);
+            var adVer = this.adjacancyList.getAdjacentVertexes(v);
+            console.log(adVer.length);
+            for (var vv in adVer) {
+                console.log("--" + adVer[vv].value);
+            }
+        }
+    };
+
+    function Graph(comparator) {
+        this.comparator = comparator;
+        this.adjacancyList = new AdjacancyList();
+        this.vertexList = [];
+        this.edgeList = [];
+    };
+
+    function Vertex(value) {
+        this.value = value;
+    };
+
+    Vertex.prototype.getValue = function () {
+        return this.value;
+    };
+
+    function Edge(vert1, vert2) {
+        this.vert1 = vert1;
+        this.vert2 = vert2;
+    };
+
+    function AdjacancyList() {
+        this.adjacancyList = [];
+    };
+    AdjacancyList.prototype.addVertexMap = function (vMap) {
+        this.adjacancyList.push(vMap);
+    };
+    AdjacancyList.prototype.getAdjacentVertexes = function (ver) {
+        var adjacancyList = this.adjacancyList;
+        var adjacentVertexes;
+        for (var vMap in adjacancyList) {
+            // console.log("adjacancyList[vMap].vertex: " + (adjacancyList[vMap].vertex.value) + "  ver:" + ver.value);
+            if (compare(ver, adjacancyList[vMap].vertex)) {
+                console.log("##########EQ");
+                adjacentVertexes = adjacancyList[vMap].addAdjacentVertex;
+                console.log("##########EQ" + adjacentVertexes.length);
+                break;
+            }
+        }
+
+        function compare(vert1, vert2) {
+            if (this.comparator === undefined) {
+                return vert1.value === vert2.value ? true : false;
+            } else {
+                this.comparator(vert1.value, vert2.value) === 0 ? true : false;
+            }
+        }
+
+        return adjacentVertexes;
+    };
+
+    function VertexMap(vertex) {
+        this.vertex = vertex;
+        this.adjacentVertexes = [];
+    };
+    VertexMap.prototype.addAdjacentVertex = function (adjVer) {
+        console.log(this.vertex.value + "   adjVer:" + adjVer.value);
+        this.adjacentVertexes.push(adjVer);
+    };
+
 
 
 
@@ -304,6 +378,9 @@ var $d = (function () {
     };
     ds.binarySearchTree = function (compFn) {
         return new BinarySearchTree(compFn);
+    };
+    ds.graph = function (compFn) {
+        return new Graph(compFn);
     };
     return ds;
 
