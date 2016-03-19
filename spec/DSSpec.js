@@ -199,7 +199,7 @@ describe("Data Structure Liabrary", function () {
         bt.add(20);
         bt.add(25);
         console.log(bt.inorder());
-        var list = bt.remove(7);
+        var list = bt.delete(7);
         console.log("after remove: " + bt.inorder());
 
         /* var list = bt.remove(7);
@@ -207,7 +207,7 @@ describe("Data Structure Liabrary", function () {
         // var list = bt.remove(12);
         //console.log("after remove: " + bt.inorder());
 
-        var list = bt.remove(10);
+        var list = bt.delete(10);
         console.log("after remove: " + bt.inorder());
 
 
