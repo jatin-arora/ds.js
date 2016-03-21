@@ -243,8 +243,19 @@ describe("Data Structure Liabrary", function () {
         grp.addEdge(grp.createEdge(vertex7, vertex9));
         grp.addEdge(grp.createEdge(vertex7, vertex10));
 
+        grp.addEdge(grp.createEdge(vertex6, vertex5));
+        grp.addEdge(grp.createEdge(vertex7, vertex5));
+        grp.addEdge(grp.createEdge(vertex8, vertex6));
+        grp.addEdge(grp.createEdge(vertex9, vertex8));
+        grp.addEdge(grp.createEdge(vertex9, vertex7));
+        grp.addEdge(grp.createEdge(vertex10, vertex7));
         grp.buildGraph();
         grp.print();
+
+        var bft = grp.breathFirstTraversal(vertex5);
+        for (var i in bft) {
+            console.log(bft[i].value);
+        }
 
     });
 })

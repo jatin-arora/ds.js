@@ -270,13 +270,11 @@ var $d = (function () {
     Graph.prototype.buildGraph = function () {
         var comparator = this.comparator;
         for (var ver in this.vertexList) {
-            var vMap = new VertexMap(this.vertexList[ver]);
+            var vert = this.vertexList[ver];
+            var vMap = new VertexMap(vert);
             for (var ed in this.edgeList) {
                 var edge = this.edgeList[ed];
-                var vert = this.vertexList[ver];
-                //  console.log(vert.value + ":::" + edge.vert1.value + "--" + edge.vert2.value);
                 if (compare(vert, edge.vert1)) {
-                    console.log(edge.vert1.value + "--" + vert.value);
                     vMap.addAdjacentVertex(edge.vert2);
                 }
             }
@@ -295,13 +293,37 @@ var $d = (function () {
     Graph.prototype.print = function () {
         for (var ver in this.vertexList) {
             var v = this.vertexList[ver];
-            console.log("vert: " + v.value);
+            console.log("Adjacent to vert: " + v.value);
             var adVer = this.adjacancyList.getAdjacentVertexes(v);
-            console.log(adVer.length);
             for (var vv in adVer) {
-                console.log("--" + adVer[vv].value);
+                console.log("---" + adVer[vv].value);
             }
         }
+    };
+
+    Graph.prototype.breathFirstTraversal = function (vertex) {
+        var output = [];
+        var queue = [];
+
+        output.push(vertex);
+        queue.push(vertex);
+        vertex.color = 'gray';
+
+        while (queue.length > 0) {
+            var ver = queue[0];
+            queue.splice(0, 1);
+            var adjVertexes = this.adjacancyList.getAdjacentVertexes(ver);
+            console.log(adjVertexes);
+            for (var vIndex in adjVertexes) {
+                var vv = adjVertexes[vIndex];
+                if (vv.color === 'white') {
+                    queue.push(vv);
+                    vv.color = 'gray';
+                    output.push(vv);
+                }
+            }
+        }
+        return output;
     };
 
     function Graph(comparator) {
@@ -313,10 +335,7 @@ var $d = (function () {
 
     function Vertex(value) {
         this.value = value;
-    };
-
-    Vertex.prototype.getValue = function () {
-        return this.value;
+        this.color = 'white';
     };
 
     function Edge(vert1, vert2) {
@@ -333,12 +352,11 @@ var $d = (function () {
     AdjacancyList.prototype.getAdjacentVertexes = function (ver) {
         var adjacancyList = this.adjacancyList;
         var adjacentVertexes;
-        for (var vMap in adjacancyList) {
+        for (var vMapIndex in adjacancyList) {
             // console.log("adjacancyList[vMap].vertex: " + (adjacancyList[vMap].vertex.value) + "  ver:" + ver.value);
-            if (compare(ver, adjacancyList[vMap].vertex)) {
-                console.log("##########EQ");
-                adjacentVertexes = adjacancyList[vMap].addAdjacentVertex;
-                console.log("##########EQ" + adjacentVertexes.length);
+            var vMap = adjacancyList[vMapIndex];
+            if (compare(ver, vMap.vertex)) {
+                adjacentVertexes = vMap.adjacentVertexes;
                 break;
             }
         }
@@ -350,7 +368,7 @@ var $d = (function () {
                 this.comparator(vert1.value, vert2.value) === 0 ? true : false;
             }
         }
-
+        //    console.log("returing adjacentVertexes:" + adjacentVertexes + "   for vertex:" + ver.value);
         return adjacentVertexes;
     };
 
@@ -359,7 +377,7 @@ var $d = (function () {
         this.adjacentVertexes = [];
     };
     VertexMap.prototype.addAdjacentVertex = function (adjVer) {
-        console.log(this.vertex.value + "   adjVer:" + adjVer.value);
+        //console.log(this.vertex.value + "   adjVer:" + adjVer.value);
         this.adjacentVertexes.push(adjVer);
     };
 
