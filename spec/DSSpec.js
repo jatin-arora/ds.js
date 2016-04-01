@@ -41,7 +41,7 @@ describe("Data Structure Liabrary", function () {
 
         //Assert
         expect(stack.pop()).toBe(66);
-        //expect(stack.pop()).toBe(55);
+        expect(stack.size()).toBe(2);
 
     });
     it("Create Stack and check teh size", function () {
@@ -198,9 +198,9 @@ describe("Data Structure Liabrary", function () {
         bt.add(12);
         bt.add(20);
         bt.add(25);
-        console.log(bt.inorder());
+        // console.log(bt.inorder());
         var list = bt.delete(7);
-        console.log("after remove: " + bt.inorder());
+        //console.log("after remove: " + bt.inorder());
 
         /* var list = bt.remove(7);
         console.log("after remove: " + bt.inorder());*/
@@ -208,7 +208,7 @@ describe("Data Structure Liabrary", function () {
         //console.log("after remove: " + bt.inorder());
 
         var list = bt.delete(10);
-        console.log("after remove: " + bt.inorder());
+        //console.log("after remove: " + bt.inorder());
 
 
         //Assert
@@ -216,7 +216,8 @@ describe("Data Structure Liabrary", function () {
         // expect(stack.peek()).toBe(66);
 
     });
-    it("Create a graph", function () {
+
+    it("Create a graph and do BFT and DFT", function () {
         //Arrange
 
         //Act
@@ -250,12 +251,184 @@ describe("Data Structure Liabrary", function () {
         grp.addEdge(grp.createEdge(vertex9, vertex7));
         grp.addEdge(grp.createEdge(vertex10, vertex7));
         grp.buildGraph();
-        grp.print();
+        //grp.print();
 
+        // console.log("BFS");
         var bft = grp.breathFirstTraversal(vertex5);
-        for (var i in bft) {
+        /*for (var i in bft) {
             console.log(bft[i].value);
-        }
+        }*/
+        expect(bft[0].value).toBe(5);
+        expect(bft[1].value).toBe(6);
+        expect(bft[2].value).toBe(7);
 
+        //console.log("DFS");
+        var dft = grp.depthFirstTraversal(vertex5);
+        /* while (dft.peek() !== undefined)
+            console.log(dft.pop());
+*/
     });
+
+    it("bubble sort", function () {
+        //Arrange
+        var sorter = $d.sorter();
+        var sArray = sorter.bubbleSort([6, 15, 7, 8, 2, 745, 2, 1324, 634, 1241, 64, 8, 8, 3, 2]);
+        expect(sArray[0]).toBe(2);
+        expect(sArray[1]).toBe(2);
+        expect(sArray[2]).toBe(2);
+        expect(sArray[3]).toBe(3);
+        expect(sArray[5]).toBe(7);
+    });
+
+    it("bubble sort with comparator", function () {
+        //Arrange
+
+        var o1 = {
+            name: 'jatin',
+            age: 36
+        };
+        var o2 = {
+            name: 'Arshia',
+            age: 6
+        };
+        var o3 = {
+            name: 'Shweta',
+            age: 33
+        };
+        var o4 = {
+            name: 'ajit',
+            age: 38
+        };
+        var o5 = {
+            name: 'neelam',
+            age: 40
+        };
+
+        function comparator(oo1, oo2) {
+            return oo1.age > oo2.age ? 1 : (oo1.age === oo2.age ? 0 : -1);
+        }
+        var sorter = $d.sorter(comparator);
+        var sArray = sorter.bubbleSort([o1, o2, o3, o4, o5]);
+        expect(sArray[0].age).toBe(6);
+        expect(sArray[1].age).toBe(33);
+        expect(sArray[2].age).toBe(36);
+        expect(sArray[3].age).toBe(38);
+        expect(sArray[4].age).toBe(40);
+    });
+
+    it("insertion sort", function () {
+        //Arrange
+        var sorter = $d.sorter();
+        var sArray = sorter.insertionSort([6, 15, 7, 8, 2, 745, 2, 1324, 634, 1241, 64, 8, 8, 3, 2]);
+        expect(sArray[0]).toBe(2);
+        expect(sArray[1]).toBe(2);
+        expect(sArray[2]).toBe(2);
+        expect(sArray[3]).toBe(3);
+        expect(sArray[5]).toBe(7);
+    });
+
+    it("insertion sort with comparator", function () {
+        //Arrange
+
+        var o1 = {
+            name: 'jatin',
+            age: 36
+        };
+        var o2 = {
+            name: 'Arshia',
+            age: 6
+        };
+        var o3 = {
+            name: 'Shweta',
+            age: 33
+        };
+        var o4 = {
+            name: 'ajit',
+            age: 38
+        };
+        var o5 = {
+            name: 'neelam',
+            age: 40
+        };
+
+        function comparator(oo1, oo2) {
+            return oo1.age > oo2.age ? 1 : (oo1.age === oo2.age ? 0 : -1);
+        }
+        var sorter = $d.sorter(comparator);
+        var sArray = sorter.insertionSort([o1, o2, o3, o4, o5]);
+        expect(sArray[0].age).toBe(6);
+        expect(sArray[1].age).toBe(33);
+        expect(sArray[2].age).toBe(36);
+        expect(sArray[3].age).toBe(38);
+        expect(sArray[4].age).toBe(40);
+    });
+
+    it("Quick sort", function () {
+        //Arrange
+        var sorter = $d.sorter();
+        var sArray = sorter.quickSort([6, 15, 7, 8, 2, 745, 2, 1324, 634, 1241, 64, 8, 8, 3, 2]);
+        /*for (var v in sArray) {
+    console.log(sArray[v]);
+}*/
+        expect(sArray[0]).toBe(2);
+        expect(sArray[1]).toBe(2);
+        expect(sArray[2]).toBe(2);
+        expect(sArray[3]).toBe(3);
+        expect(sArray[5]).toBe(7);
+    });
+
+    it("Quick sort with comparator", function () {
+        //Arrange
+
+        var o1 = {
+            name: 'jatin',
+            age: 36
+        };
+        var o2 = {
+            name: 'Arshia',
+            age: 6
+        };
+        var o3 = {
+            name: 'Shweta',
+            age: 33
+        };
+        var o4 = {
+            name: 'ajit',
+            age: 38
+        };
+        var o5 = {
+            name: 'neelam',
+            age: 40
+        };
+
+        function comparator(oo1, oo2) {
+            return oo1.age > oo2.age ? 1 : (oo1.age === oo2.age ? 0 : -1);
+        }
+        var sorter = $d.sorter(comparator);
+        var sArray = sorter.quickSort([o1, o2, o3, o4, o5]);
+        expect(sArray[0].age).toBe(6);
+        expect(sArray[1].age).toBe(33);
+        expect(sArray[2].age).toBe(36);
+        expect(sArray[3].age).toBe(38);
+        expect(sArray[4].age).toBe(40);
+        /*  for (var v in sArray) {
+      console.log(sArray[v].name + ", " +
+          sArray[v].age);
+  }*/
+    });
+
+    it("Merge sort", function () {
+        //Arrange
+        var sorter = $d.sorter();
+        var sArray = sorter.mergeSort([5, 7, 3, 2, 9, 1]);
+        for (var v in sArray) {
+            console.log("---" + sArray[v]);
+        }
+        /*expect(sArray[0]).toBe(2);
+        expect(sArray[1]).toBe(2);
+        expect(sArray[2]).toBe(2);
+        expect(sArray[3]).toBe(3);
+        expect(sArray[5]).toBe(7);*/
+    });
+
 })

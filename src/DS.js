@@ -1,16 +1,18 @@
 var $d = (function () {
-    var ds = function (input, additionFn) {
-        //console.log(input);
-        if (input === ':ll') {
+    var ds = function (identifier, additionFn) {
+        ////console.log(identifier);
+        if (identifier === ':ll') {
             return ds.linkedlist();
-        } else if (input === ":st") {
+        } else if (identifier === ":st") {
             return ds.stack();
-        } else if (input === ":qu") {
+        } else if (identifier === ":qu") {
             return ds.queue();
-        } else if (input === ":bst") {
+        } else if (identifier === ":bst") {
             return ds.binarySearchTree(additionFn);
-        } else if (input === ":grp") {
+        } else if (identifier === ":grp") {
             return ds.graph(additionFn);
+        } else if (identifier === ":sorter") {
+            return ds.sorter(additionFn);
         }
     };
 
@@ -20,7 +22,12 @@ var $d = (function () {
         this.previous = previous;
     };
 
+    /**
+     * LinkedList
+     * @param {[[Type]]} val [[Description]]
+     */
     function LinkedList(val) {
+        ////console.log(val);
         if (val !== undefined) {
             this.root = new Node(val);
             this.nextNode = this.root;
@@ -39,7 +46,7 @@ var $d = (function () {
             tmpNode.next = newNode;
         }
         this.nextNode = this.root;
-        return this;
+        // return this;
     };
 
     LinkedList.prototype.addAtFirst = function (val) {
@@ -47,7 +54,7 @@ var $d = (function () {
         newNode.next = this.root;
         this.root = newNode;
         this.nextNode = this.root;
-        return this;
+        //  return this;
     };
 
     LinkedList.prototype.moveToFirst = function () {
@@ -71,9 +78,13 @@ var $d = (function () {
         }
         return size;
     };
-
-    function Stack() {
+    /**
+     * Stack
+     * @param {[[Type]]} comparator [[Description]]
+     */
+    function Stack(comparator) {
         this.stackArray = [];
+        this.comparator = comparator;
     };
     Stack.prototype.push = function (val) {
         if (val !== undefined) {
@@ -82,7 +93,7 @@ var $d = (function () {
     };
 
     Stack.prototype.pop = function () {
-        return this.stackArray.splice(this.stackArray.length - 1, 1)[0];
+        return this.stackArray.pop();
     };
 
     Stack.prototype.peek = function () {
@@ -93,8 +104,13 @@ var $d = (function () {
         return this.stackArray.length;
     };
 
-    function Queue() {
+    /**
+     * Queue
+     * @param {[[Type]]} comparator [[Description]]
+     */
+    function Queue(comparator) {
         this.queueArray = [];
+        this.comparator = comparator;
     };
     Queue.prototype.enqueue = function (val) {
         this.queueArray.push(val);
@@ -108,7 +124,30 @@ var $d = (function () {
     Queue.prototype.size = function () {
         return this.queueArray.length;
     };
+    Queue.prototype.contains = function (val) {
+        var comparator = this.comparator;
+        var contained = false;
+        for (var vIndex in this.queueArray) {
+            if (equals(this.queueArray[vIndex], val)) {
+                contained = true;
+                break;
+            }
+        }
 
+        function equals(v1, v2) {
+            if (comparator === undefined) {
+                return v1 === v2 ? true : false;
+            } else {
+                return comparator(v1, v2) === 0 ? true : false;
+            }
+        }
+        return contained;
+    };
+
+    /**
+     * BinarySearchTree
+     * @param {[[Type]]} comparatorFn [[Description]]
+     */
     function BinarySearchTree(comparatorFn) {
         this.root;
         this.comparatorFn = comparatorFn;
@@ -158,7 +197,7 @@ var $d = (function () {
         if (equals(rootNode.val, remVal)) {
             // ROOT NEED TO BE REMOVED   
             sNode = rootNode;
-            console.log("ITS A ROOT NODE : " + sNode.val);
+            //console.log("ITS A ROOT NODE : " + sNode.val);
         } else {
             preorder(rootNode);
         }
@@ -195,7 +234,7 @@ var $d = (function () {
             return preorder(node.previous) || preorder(node.next);
         };
 
-        console.log("parentNode: " + (pNode !== undefined ? pNode.val : "undefined") + " Searched Node:" + (sNode == undefined ? "undefined" : sNode.val));
+        // console.log("parentNode: " + (pNode !== undefined ? pNode.val : "undefined") + " Searched Node:" + (sNode == undefined ? "undefined" : sNode.val));
 
         if (sNode !== undefined) {
             if (sNode.previous !== undefined && sNode.next !== undefined) {
@@ -251,7 +290,10 @@ var $d = (function () {
 
 
 
-
+    /**
+     * Graph
+     * @param {[[Type]]} vertex [[Description]]
+     */
 
     Graph.prototype.addVertex = function (vertex) {
         this.vertexList.push(vertex);
@@ -293,11 +335,12 @@ var $d = (function () {
     Graph.prototype.print = function () {
         for (var ver in this.vertexList) {
             var v = this.vertexList[ver];
-            console.log("Adjacent to vert: " + v.value);
+            // console.log("Adjacent to vert: " + v.value);
             var adVer = this.adjacancyList.getAdjacentVertexes(v);
-            for (var vv in adVer) {
+            /* for (var vv in adVer) {
                 console.log("---" + adVer[vv].value);
             }
+*/
         }
     };
 
@@ -307,18 +350,47 @@ var $d = (function () {
 
         output.push(vertex);
         queue.push(vertex);
-        vertex.color = 'gray';
+        var holder = {};
+        holder[vertex.value] = true;
 
         while (queue.length > 0) {
             var ver = queue[0];
             queue.splice(0, 1);
             var adjVertexes = this.adjacancyList.getAdjacentVertexes(ver);
-            console.log(adjVertexes);
+            //  console.log("vertex :" + ver.value + " length: " + adjVertexes.length + " QUEUE LENGTH: " + queue.length);
+            for (var vIndex in adjVertexes) {
+
+                var vv = adjVertexes[vIndex];
+                // console.log("holder.vv:" + holder[vv.value] + "   vv:" + vv.value);
+                if (holder[vv.value] === undefined) {
+                    queue.push(vv);
+                    holder[vv.value] = true;
+                    output.push(vv);
+                }
+            }
+        }
+        return output;
+    };
+
+
+    Graph.prototype.depthFirstTraversal = function (vertex) {
+        var output = ds.stack();
+        var stack = ds.stack();
+
+        output.push(vertex);
+        stack.push(vertex);
+        var holder = {};
+        holder[vertex.value] = true;
+
+        while (stack.size() > 0) {
+            var ver = stack.pop();
+            var adjVertexes = this.adjacancyList.getAdjacentVertexes(ver);
+            //  console.log(adjVertexes);
             for (var vIndex in adjVertexes) {
                 var vv = adjVertexes[vIndex];
-                if (vv.color === 'white') {
-                    queue.push(vv);
-                    vv.color = 'gray';
+                if (holder[vv.value] === undefined) {
+                    stack.push(vv);
+                    holder[vv.value] = true;
                     output.push(vv);
                 }
             }
@@ -335,7 +407,6 @@ var $d = (function () {
 
     function Vertex(value) {
         this.value = value;
-        this.color = 'white';
     };
 
     function Edge(vert1, vert2) {
@@ -353,7 +424,7 @@ var $d = (function () {
         var adjacancyList = this.adjacancyList;
         var adjacentVertexes;
         for (var vMapIndex in adjacancyList) {
-            // console.log("adjacancyList[vMap].vertex: " + (adjacancyList[vMap].vertex.value) + "  ver:" + ver.value);
+            // //console.log("adjacancyList[vMap].vertex: " + (adjacancyList[vMap].vertex.value) + "  ver:" + ver.value);
             var vMap = adjacancyList[vMapIndex];
             if (compare(ver, vMap.vertex)) {
                 adjacentVertexes = vMap.adjacentVertexes;
@@ -368,7 +439,7 @@ var $d = (function () {
                 this.comparator(vert1.value, vert2.value) === 0 ? true : false;
             }
         }
-        //    console.log("returing adjacentVertexes:" + adjacentVertexes + "   for vertex:" + ver.value);
+        //    //console.log("returing adjacentVertexes:" + adjacentVertexes + "   for vertex:" + ver.value);
         return adjacentVertexes;
     };
 
@@ -377,13 +448,141 @@ var $d = (function () {
         this.adjacentVertexes = [];
     };
     VertexMap.prototype.addAdjacentVertex = function (adjVer) {
-        //console.log(this.vertex.value + "   adjVer:" + adjVer.value);
+        ////console.log(this.vertex.value + "   adjVer:" + adjVer.value);
         this.adjacentVertexes.push(adjVer);
     };
 
+    /**
+     * SORTING ALGORITHIMS
+     * @param   {[[Type]]} comparator [[Description]]
+     * @returns {[[Type]]} [[Description]]
+     */
+    function Sorter(comparator) {
+
+        function compareTo(v1, v2) {
+            if (comparator === undefined) {
+                return v1 > v2 ? 1 : (v1 === v2 ? 0 : -1);
+            } else {
+                return comparator(v1, v2);
+            }
+        }
+
+        this.bubbleSort = function (array) {
+            if (array instanceof Array) {
+                for (var i = 0; i < array.length; i++) {
+                    for (var j = i; j < array.length; j++) {
+                        if (compareTo(array[i], array[j]) > 0) {
+                            var temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                    }
+                }
+                return array;
+            }
+        };
 
 
 
+        this.insertionSort = function (array) {
+            if (array instanceof Array) {
+                var tmpArray = [];
+                tmpArray.push(array[0]);
+                for (var i = 1; i < array.length; i++) {
+                    var indx = tmpArray.length;
+                    while (indx > 0 && compareTo(tmpArray[indx - 1], array[i]) > 0) {
+                        tmpArray[indx] = tmpArray[indx - 1];
+                        indx--;
+                    }
+
+                    tmpArray[indx] = array[i];
+                }
+                return tmpArray;
+            }
+        };
+
+
+        this.quickSort = function (array) {
+            if (array instanceof Array) {
+                qSort(0, array.length - 1, array);
+                return array;
+            }
+
+            function qSort(start, end, array) {
+                var sIndx = start,
+                    eIndx = end;
+                var paviot = array[eIndx];
+                while (sIndx <= eIndx) {
+                    while (compareTo(array[sIndx], paviot) < 0) {
+                        sIndx++;
+                    }
+                    while (compareTo(array[eIndx], paviot) > 0) {
+                        eIndx--;
+                    }
+                    if (sIndx <= eIndx) {
+                        var tmp = array[sIndx];
+                        array[sIndx] = array[eIndx];
+                        array[eIndx] = tmp;
+                        sIndx++;
+                        eIndx--;
+                    }
+                }
+                if (start < end) {
+                    qSort(start, eIndx, array);
+                    qSort(eIndx + 1, end, array);
+                }
+            }
+        };
+
+        this.mergeSort = function (array) {
+            if (array instanceof Array) {
+                divide(0, array.length - 1, array)
+                return array;
+            }
+
+            function divide(p, q, array) {
+                if (p < q) {
+                    var mid = Math.floor((p + q) / 2);
+                    console.log("mid: " + mid);
+                    divide(p, mid, array);
+                    divide(mid + 1, q, array);
+                    conquer(p, mid, q, array);
+                }
+            }
+
+            function conquer(p1, r1, q1, array) {
+                console.log(" p1: " + p1 + " r1:" + r1 + "  q1:" + q1);
+                var p = p1,
+                    q = q1,
+                    r = r1 + 1;
+                var tArr = [];
+                for (var i = p1; i <= q1; i++) {
+                  /*  console.log("(array[p] :" + array[p] + ", array[r] " + array[r])*/
+                    if (array[p] < array[r]) {
+                        tArr.push(array[p]);
+                        p++;
+                    } else {
+                        tArr.push(array[r]);
+                        r++;
+                    }
+                }
+               /* for (var v in tArr) {
+                    console.log("tmp: " + tArr[v]);
+                }*/
+                var j = 0;
+
+                for (var i1 = p1; i1 < q1; i1++) {
+                    array[i1] = tArr[j++];
+                   /* console.log("array[i1]: " +
+     array[i1] + " tArr[j]==" + tArr[j]);*/
+                }
+            }
+        }
+
+    };
+    /**
+     * $d exposed functions
+     */
     ds.queue = function () {
         return new Queue();
     };
@@ -400,6 +599,10 @@ var $d = (function () {
     ds.graph = function (compFn) {
         return new Graph(compFn);
     };
+
+    ds.sorter = function (compFn) {
+        return new Sorter(compFn);
+    }
     return ds;
 
 })();
