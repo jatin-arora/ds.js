@@ -424,11 +424,62 @@ describe("Data Structure Liabrary", function () {
         for (var v in sArray) {
             console.log("---" + sArray[v]);
         }
-        /*expect(sArray[0]).toBe(2);
+        expect(sArray[0]).toBe(1);
+        expect(sArray[1]).toBe(2);
+        expect(sArray[2]).toBe(3);
+        expect(sArray[3]).toBe(5);
+        expect(sArray[4]).toBe(7);
+    });
+
+    it("Merge sort with comparator", function () {
+        //Arrange
+
+        var o1 = {
+            name: 'jatin',
+            age: 36
+        };
+        var o2 = {
+            name: 'Arshia',
+            age: 6
+        };
+        var o3 = {
+            name: 'Shweta',
+            age: 33
+        };
+        var o4 = {
+            name: 'ajit',
+            age: 38
+        };
+        var o5 = {
+            name: 'neelam',
+            age: 40
+        };
+
+        function comparator(oo1, oo2) {
+            return oo1.age > oo2.age ? 1 : (oo1.age === oo2.age ? 0 : -1);
+        }
+        var sorter = $d.sorter(comparator);
+        var sArray = sorter.mergeSort([o1, o2, o3, o4, o5]);
+        expect(sArray[0].age).toBe(6);
+        expect(sArray[1].age).toBe(33);
+        expect(sArray[2].age).toBe(36);
+        expect(sArray[3].age).toBe(38);
+        expect(sArray[4].age).toBe(40);
+        /*  for (var v in sArray) {
+      console.log(sArray[v].name + ", " +
+          sArray[v].age);
+  }*/
+    });
+
+    it("Merge sort", function () {
+        //Arrange
+        var sorter = $d.sorter();
+        var sArray = sorter.quickSort([6, 15, 7, 8, 2, 745, 2, 1324, 634, 1241, 64, 8, 8, 3, 2]);
+        expect(sArray[0]).toBe(2);
         expect(sArray[1]).toBe(2);
         expect(sArray[2]).toBe(2);
         expect(sArray[3]).toBe(3);
-        expect(sArray[5]).toBe(7);*/
+        expect(sArray[5]).toBe(7);
     });
 
 })

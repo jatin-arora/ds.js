@@ -548,7 +548,7 @@ var $d = (function () {
                     divide(mid + 1, q, array);
                     conquer(p, mid, q, array);
                 }
-            }
+            };
 
             function conquer(p1, r1, q1, array) {
                 console.log(" p1: " + p1 + " r1:" + r1 + "  q1:" + q1);
@@ -556,29 +556,29 @@ var $d = (function () {
                     q = q1,
                     r = r1 + 1;
                 var tArr = [];
-                for (var i = p1; i <= q1; i++) {
-                  /*  console.log("(array[p] :" + array[p] + ", array[r] " + array[r])*/
-                    if (array[p] < array[r]) {
-                        tArr.push(array[p]);
-                        p++;
-                    } else {
-                        tArr.push(array[r]);
-                        r++;
+                for (var i = p1; i <= r1; i++) {
+                    if (p <= r1 && compareTo(array[p], array[r]) < 0) {
+                        tArr.push(array[p++]);
+                    } else if (r <= q1) {
+                        tArr.push(array[r++]);
                     }
                 }
-               /* for (var v in tArr) {
-                    console.log("tmp: " + tArr[v]);
-                }*/
-                var j = 0;
-
-                for (var i1 = p1; i1 < q1; i1++) {
-                    array[i1] = tArr[j++];
-                   /* console.log("array[i1]: " +
-     array[i1] + " tArr[j]==" + tArr[j]);*/
+                while (p <= r1) {
+                    tArr.push(array[p++]);
                 }
-            }
-        }
+                while (r <= q1) {
+                    tArr.push(array[r++]);
+                }
 
+                var j = 0;
+                for (var i1 = p1; i1 <= q1; i1++) {
+                    array[i1] = tArr[j];
+                    j++;
+                }
+
+            };
+
+        };
     };
     /**
      * $d exposed functions
