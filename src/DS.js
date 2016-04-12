@@ -1,4 +1,5 @@
 var $d = (function () {
+    //console.log("88888888888888888*************************************************8888888888888888888");
     var ds = function (identifier, additionFn) {
         ////console.log(identifier);
         if (identifier === ':ll') {
@@ -13,6 +14,10 @@ var $d = (function () {
             return ds.graph(additionFn);
         } else if (identifier === ":sorter") {
             return ds.sorter(additionFn);
+        } else if (identifier === ":heap") {
+            return ds.heap(additionFn);
+        } else if (identifier === ":tri") {
+            return ds.tries(additionFn);
         }
     };
 
@@ -458,128 +463,351 @@ var $d = (function () {
      * @returns {[[Type]]} [[Description]]
      */
     function Sorter(comparator) {
-
-        function compareTo(v1, v2) {
+        this.compareTo = function (v1, v2) {
             if (comparator === undefined) {
                 return v1 > v2 ? 1 : (v1 === v2 ? 0 : -1);
             } else {
                 return comparator(v1, v2);
             }
         }
+    };
 
-        this.bubbleSort = function (array) {
-            if (array instanceof Array) {
-                for (var i = 0; i < array.length; i++) {
-                    for (var j = i; j < array.length; j++) {
-                        if (compareTo(array[i], array[j]) > 0) {
-                            var temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                        }
+
+    Sorter.prototype.selectionSort = function (array) {
+        if (array instanceof Array) {
+            for (var i = 0; i < array.length; i++) {
+                var min = i;
+                for (var j = i + 1; j < array.length; j++) {
+                    if (this.compareTo(array[min], array[j]) > 0) {
+                        min = j;
                     }
                 }
-                return array;
+                if (min !== i) {
+                    var temp = array[i];
+                    array[i] = array[min];
+                    array[min] = temp;
+                }
+            }
+            return array;
+        }
+    };
+
+    Sorter.prototype.bubbleSort = function (array) {
+        if (array instanceof Array) {
+            for (var i = 0; i < array.length; i++) {
+                for (var j = 0; j < array.length - 1; j++) {
+                    if (this.compareTo(array[j], array[j + 1]) > 0) {
+                        var temp = array[j];
+                        array[j] = array[j + 1];
+                        array[j + 1] = temp;
+                    }
+                }
+            }
+            return array;
+        }
+    };
+
+
+
+    Sorter.prototype.insertionSort = function (array) {
+        if (array instanceof Array) {
+            var tmpArray = [];
+            tmpArray.push(array[0]);
+            for (var i = 1; i < array.length; i++) {
+                var indx = tmpArray.length;
+                while (indx > 0 && this.compareTo(tmpArray[indx - 1], array[i]) > 0) {
+                    tmpArray[indx] = tmpArray[indx - 1];
+                    indx--;
+                }
+
+                tmpArray[indx] = array[i];
+            }
+            return tmpArray;
+        }
+    };
+
+
+    Sorter.prototype.quickSort = function (array) {
+        var compareTo = this.compareTo;
+        if (array instanceof Array) {
+            qSort(0, array.length - 1, array);
+            return array;
+        }
+
+        function qSort(start, end, array) {
+            var sIndx = start,
+                eIndx = end;
+            var paviot = array[eIndx];
+            while (sIndx <= eIndx) {
+                while (compareTo(array[sIndx], paviot) < 0) {
+                    sIndx++;
+                }
+                while (compareTo(array[eIndx], paviot) > 0) {
+                    eIndx--;
+                }
+                if (sIndx <= eIndx) {
+                    var tmp = array[sIndx];
+                    array[sIndx] = array[eIndx];
+                    array[eIndx] = tmp;
+                    sIndx++;
+                    eIndx--;
+                }
+            }
+            if (start < end) {
+                qSort(start, eIndx, array);
+                qSort(eIndx + 1, end, array);
+            }
+        }
+    };
+
+    Sorter.prototype.mergeSort = function (array) {
+        var compareTo = this.compareTo;
+        if (array instanceof Array) {
+            divide(0, array.length - 1, array)
+            return array;
+        }
+
+        function divide(p, q, array) {
+            if (p < q) {
+                var mid = Math.floor((p + q) / 2);
+                //console.log("mid: " + mid);
+                divide(p, mid, array);
+                divide(mid + 1, q, array);
+                conquer(p, mid, q, array);
             }
         };
 
-
-
-        this.insertionSort = function (array) {
-            if (array instanceof Array) {
-                var tmpArray = [];
-                tmpArray.push(array[0]);
-                for (var i = 1; i < array.length; i++) {
-                    var indx = tmpArray.length;
-                    while (indx > 0 && compareTo(tmpArray[indx - 1], array[i]) > 0) {
-                        tmpArray[indx] = tmpArray[indx - 1];
-                        indx--;
-                    }
-
-                    tmpArray[indx] = array[i];
-                }
-                return tmpArray;
-            }
-        };
-
-
-        this.quickSort = function (array) {
-            if (array instanceof Array) {
-                qSort(0, array.length - 1, array);
-                return array;
-            }
-
-            function qSort(start, end, array) {
-                var sIndx = start,
-                    eIndx = end;
-                var paviot = array[eIndx];
-                while (sIndx <= eIndx) {
-                    while (compareTo(array[sIndx], paviot) < 0) {
-                        sIndx++;
-                    }
-                    while (compareTo(array[eIndx], paviot) > 0) {
-                        eIndx--;
-                    }
-                    if (sIndx <= eIndx) {
-                        var tmp = array[sIndx];
-                        array[sIndx] = array[eIndx];
-                        array[eIndx] = tmp;
-                        sIndx++;
-                        eIndx--;
-                    }
-                }
-                if (start < end) {
-                    qSort(start, eIndx, array);
-                    qSort(eIndx + 1, end, array);
-                }
-            }
-        };
-
-        this.mergeSort = function (array) {
-            if (array instanceof Array) {
-                divide(0, array.length - 1, array)
-                return array;
-            }
-
-            function divide(p, q, array) {
-                if (p < q) {
-                    var mid = Math.floor((p + q) / 2);
-                    console.log("mid: " + mid);
-                    divide(p, mid, array);
-                    divide(mid + 1, q, array);
-                    conquer(p, mid, q, array);
-                }
-            };
-
-            function conquer(p1, r1, q1, array) {
-                console.log(" p1: " + p1 + " r1:" + r1 + "  q1:" + q1);
-                var p = p1,
-                    q = q1,
-                    r = r1 + 1;
-                var tArr = [];
-                for (var i = p1; i <= r1; i++) {
-                    if (p <= r1 && compareTo(array[p], array[r]) < 0) {
-                        tArr.push(array[p++]);
-                    } else if (r <= q1) {
-                        tArr.push(array[r++]);
-                    }
-                }
-                while (p <= r1) {
+        function conquer(p1, r1, q1, array) {
+            //console.log(" p1: " + p1 + " r1:" + r1 + "  q1:" + q1);
+            var p = p1,
+                q = q1,
+                r = r1 + 1;
+            var tArr = [];
+            for (var i = p1; i <= r1; i++) {
+                if (p <= r1 && compareTo(array[p], array[r]) < 0) {
                     tArr.push(array[p++]);
-                }
-                while (r <= q1) {
+                } else if (r <= q1) {
                     tArr.push(array[r++]);
                 }
+            }
+            while (p <= r1) {
+                tArr.push(array[p++]);
+            }
+            while (r <= q1) {
+                tArr.push(array[r++]);
+            }
 
-                var j = 0;
-                for (var i1 = p1; i1 <= q1; i1++) {
-                    array[i1] = tArr[j];
-                    j++;
-                }
-
-            };
+            var j = 0;
+            for (var i1 = p1; i1 <= q1; i1++) {
+                array[i1] = tArr[j];
+                j++;
+            }
 
         };
+
     };
+
+    Sorter.prototype.heapSort = function (array) {
+
+        if (array instanceof Array) {
+            var heap = new Heap(this.comparator);
+            //console.log(" arr: " + array);
+            heap.build(array);
+            var newArray = [];
+            var arLen = array.length;
+            for (var i = 0; i < arLen; i++) {
+                newArray.push(heap.deleteMin());
+            }
+            return newArray;
+        }
+
+
+    }
+
+
+    /**
+     * HEAP
+     * @param   {[[Type]]} comparator [[Description]]
+     * @returns {[[Type]]} [[Description]]
+     */
+
+    function Heap(comparator) {
+        this.array = undefined;
+        this.compareTo = function (v1, v2) {
+            if (comparator === undefined) {
+                return v1 > v2 ? 1 : (v1 === v2 ? 0 : -1);
+            } else {
+                return comparator(v1, v2);
+            }
+        };
+    };
+
+    Heap.prototype.heapify = function (index) {
+        //  console.log("index:" + index + " arr: " + array);
+        var left = index * 2 <= array.length ? index * 2 : undefined;
+        var right = (left !== undefined) && (((index * 2) + 1) <= array.length) ? ((index * 2) + 1) : undefined;
+        // console.log("left: " + left + "  right:" + right);
+        var smallerIndex = (left !== undefined && right !== undefined) ? (array[left - 1] < array[right - 1] ? left : right) : (left !== undefined ? left : undefined);
+        // console.log("smallerIndex:" + smallerIndex);
+        if (smallerIndex !== undefined) {
+            if (this.compareTo(array[index - 1], array[smallerIndex - 1]) > 0) {
+                //   console.log("swapinf")
+                var tmp = array[index - 1];
+                array[index - 1] = array[smallerIndex - 1];
+                array[smallerIndex - 1] = tmp;
+                this.heapify(smallerIndex);
+            }
+        }
+    };
+
+    Heap.prototype.build = function (arr) {
+        array = arr;
+        //   console.log("RECHED ER");
+        if (array instanceof Array) {
+            //    console.log("***************8");
+            var len = Math.floor(array.length / 2);
+            for (var i = len; i >= 1; i--) {
+                this.heapify(i, array);
+            }
+        }
+        return array;
+    };
+
+    Heap.prototype.deleteMin = function () {
+        var min = array[0];
+        var last = array[array.length - 1];
+        var v = array.splice(array.length - 1, 1);
+
+
+        //   log("last :" + last + "  v: " + v);
+        array[0] = last;
+        this.heapify(1);
+        return min;
+    };
+
+
+
+    /**
+     * Tries
+     * @param {[[Type]]} text [[Description]]
+     */
+
+    function Tries(comparator) {
+        this.root;
+        this.comparator = comparator;
+        this.compareTo = function (v1, v2) {
+            if (this.comparator === undefined) {
+                return v1 > v2 ? 1 : (v1 === v2) ? 0 : -1;
+            } else {
+                return this.comparator(v1, v2);
+            }
+        };
+    };
+
+    Tries.prototype.addData = function (data) {
+        if (this.root === undefined) {
+            this.root = new TNode("", this.comparator);
+        }
+        var node = this.root;
+        for (var v in data) {
+            node = node.addChild(data[v]);
+        }
+        node.addChild(';');
+    };
+
+    Tries.prototype.print = function () {
+        prn(this.root);
+
+        function prn(node) {
+            log("val: " + node.val);
+            for (var v in node.children) {
+                prn(node.children[v]);
+            }
+        }
+    };
+
+    Tries.prototype.find = function (text) {
+        var node = this.root;
+        var compareTo = this.compareTo;
+        for (var i = 0; i < text.length; i++) {
+            //log("char : " + text[i] + "    node val : " + node.val);
+            node = contains(node, text[i]);
+            if (node === undefined) {
+                break;
+            }
+        }
+        var endVal = node !== undefined ? contains(node, ';') : undefined;
+        return endVal === undefined ? false : true;
+
+        function contains(node, c) {
+            var retVal;
+            for (var n in node.children) {
+                //  log("n val " + node.children[n].val + "   node.children len:  " + node.children.length + "   node val:[" + node.val + "]" + "  c:" + c);
+                if (compareTo(node.children[n].val, c) === 0) {
+                    retVal = node.children[n];
+                    break;
+                }
+            }
+            return retVal;
+        }
+    };
+
+    function TNode(val, comparator) {
+        this.val = val;
+        this.comp = comparator;
+        this.children = [];
+    };
+
+    TNode.prototype.addChild = function (childVal) {
+        var node, nxtNode;
+
+        var index = 0;
+        //        log("this.children.length:: " + this.children.length + "  this val :" + this.val);
+        for (var i = 0; i < this.children.length; i++) {
+            node = this.children[i];
+            nxtNode = this.children[i + 1];
+            var resval = this.compareTo(childVal, node.val);
+            var nxtResVal = nxtNode === undefined ? 0 : this.compareTo(childVal, nxtNode.val);
+            //log("childVal: " + childVal + ", node.val " +
+            // node.val + ", resval: " + resval);
+            if (resval === 0) {
+                index = -1;
+                break;
+            } else {
+                if (resval > 0) {
+                    index = i + 1;
+                    if (nxtResVal < 0) {
+                        break;
+                    }
+                } else {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        if (index != -1) {
+            node = new TNode(childVal, this.comp);
+            this.children.splice(index, 0, node);
+            // log("adding " + node.val + " at index " + index);
+        }
+
+        return node;
+    };
+
+    TNode.prototype.compareTo = function (v1, v2) {
+        if (this.comp === undefined) {
+            return v1 > v2 ? 1 : (v1 === v2) ? 0 : -1;
+        } else {
+            return this.comp(v1, v2);
+        }
+    };
+
+
+
+    log = function (text) {
+        console.log(text);
+    }
+
     /**
      * $d exposed functions
      */
@@ -602,7 +830,15 @@ var $d = (function () {
 
     ds.sorter = function (compFn) {
         return new Sorter(compFn);
-    }
+    };
+
+    ds.heap = function (compFn) {
+        return new Heap(compFn);
+    };
+
+    ds.tries = function (compFn) {
+        return new Tries(compFn);
+    };
     return ds;
 
 })();
