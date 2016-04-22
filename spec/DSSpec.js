@@ -584,4 +584,7 @@ describe("Data Structure Liabrary", function () {
 
     });
 
+//    it("Tower of Hanoi", function () {
+            //        $d.towerOfHanoi();
+            //    });
 })

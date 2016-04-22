@@ -31,6 +31,7 @@ var $d = (function () {
      * LinkedList
      * @param {[[Type]]} val [[Description]]
      */
+
     function LinkedList(val) {
         ////console.log(val);
         if (val !== undefined) {
@@ -631,6 +632,7 @@ var $d = (function () {
      * @returns {[[Type]]} [[Description]]
      */
 
+
     function Heap(comparator) {
         this.array = undefined;
         this.compareTo = function (v1, v2) {
@@ -803,6 +805,23 @@ var $d = (function () {
     };
 
 
+    //    function TowerOfHanoi() {
+    //
+    //        function move(count, from, spare, to) {
+    //            if (count == 1) {
+    //                log("Moving from " + from + " to " + to);
+    //            } else {
+    //                move(count - 1, from, to, spare);
+    //                log("moved from " + from + " to " + to);
+    //                move(count - 1, spare, from, to);
+    //            }
+    //        }
+    //
+    //        move(4, 'A', 'C', 'B');
+    //
+    //    }
+
+
 
     log = function (text) {
         console.log(text);
@@ -839,6 +858,10 @@ var $d = (function () {
     ds.tries = function (compFn) {
         return new Tries(compFn);
     };
+
+    //    ds.towerOfHanoi = function () {
+    //        return new TowerOfHanoi();
+    //    };
     return ds;
 
 })();

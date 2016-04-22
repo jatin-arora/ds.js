@@ -1,0 +1,6 @@
+*.html
+
+spec/
+lib/
+
+*.LICENSE
