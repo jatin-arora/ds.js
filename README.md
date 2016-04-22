@@ -11,6 +11,7 @@ Data structures supported are
 7. Heap
 
 It also supports sorting algorithms like
+
 1. Bubble Sort
 2. Selection Sort
 3. Insertation Sort
@@ -47,4 +48,5 @@ sorter.insertationSort(array, comparator);
 sorter.quickSort(array, comparator);
 sorter.mergeSort(array, comparator);
 sorter.heapSort(array, comparator);
+
 
