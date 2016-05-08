@@ -1,5 +1,4 @@
 var $d = (function () {
-    //console.log("88888888888888888*************************************************8888888888888888888");
     var ds = function (identifier, additionFn) {
         ////console.log(identifier);
         if (identifier === ':ll') {
