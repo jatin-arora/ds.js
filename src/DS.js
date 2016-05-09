@@ -82,6 +82,60 @@ var $d = (function () {
     };
 
 
+///////////////////////////////   XOR LinkedList   ///////////////////////////////////////////
+                             // ------------------ //
+
+
+    /**
+     * XORLinkedList
+     * @param {[[Type]]} val [[Description]]
+     */
+
+    function XORLinkedList(comparator) {
+        this.comparator = comparator;
+        this.root;
+    };
+
+    XORLinkedList.prototype.add = function(value){
+        var newNode = new Node(value);
+        if( this.root === undefined){
+             this.root = newNode;
+        }else{
+            var nxtNode = this.root, prevNode;
+            while(nxtNode.next !== undefined){
+                prevNode = nxtNode;
+                nxtNode = nxtNode.next;
+            }
+            nxtNode.next = newNode;
+            nxtNode.previous = prevNode ^ newNode;
+            newNode.previous = nxtNode ^ undefined;
+            log( " nxtNode "+nxtNode.previous+"    newNode "+newNode.previous);
+        }
+
+    };
+
+    XORLinkedList.prototype.iterator = function(){
+
+        var sNode = this.root;
+
+        function next(){
+            var value = sNode.val;
+            sNode = sNode.next;
+            log("'--------val --------"+value)
+            return value;
+        };
+
+        function previous(){
+             log("previous val===================> "+sNode.val+"    sNode.previous>  "+sNode.previous);
+            sNode = sNode ^ sNode.previous;
+             log("previous val===================>>>>>>>>>>> "+sNode.val);
+            var value = sNode.val;
+            return value;
+        }
+
+        return {next : next, previous : previous};
+    }
+
 ///////////////////////////////   STACK   ///////////////////////////////////////////
                           //   ----------- //
     /**
@@ -844,9 +898,15 @@ var $d = (function () {
         return new Stack();
     };
 
-    ds.linkedlist = function (val) {
-        return new LinkedList(val);
+    ds.linkedlist = function (compFn) {
+        return new LinkedList(compFn);
     };
+
+    ds.xorlinkedlist = function (compFn) {
+        return new XORLinkedList(compFn);
+    };
+
+
     ds.binarySearchTree = function (compFn) {
         return new BinarySearchTree(compFn);
     };
