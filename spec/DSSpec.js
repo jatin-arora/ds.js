@@ -3,9 +3,10 @@ describe("Data Structure Liabrary", function () {
         //Arrange
 
         //Act
-        var list = $d.linkedlist(4);
+        var list = $d.linkedlist();
+        var iterator = list.iterator();
         //Assert
-        expect(list.next()).toBe(4);
+        expect(iterator.next()).toBe(undefined);
     });
     it("Create LinkedList without initial value", function () {
         //Arrange
@@ -15,8 +16,10 @@ describe("Data Structure Liabrary", function () {
         list.addToLast(4);
         list.addAtFirst(5);
 
+        var iterator = list.iterator();
         //Assert
-        expect(list.next()).toBe(5);
+        expect(iterator.next()).toBe(5);
+        expect(iterator.next()).toBe(4);
     });
     it("Create LinkedList with keyword", function () {
         //Arrange
@@ -25,9 +28,9 @@ describe("Data Structure Liabrary", function () {
         var list = $d(":ll");
         list.addToLast(4);
         list.addAtFirst(5);
-
+        var iterator = list.iterator();
         //Assert
-        expect(list.next()).toBe(5);
+        expect(iterator.next()).toBe(5);
         expect(list.size()).toBe(2);
     });
     it("Create Stack with keyword", function () {

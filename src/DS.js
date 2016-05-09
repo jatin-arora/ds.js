@@ -1,6 +1,5 @@
 var $d = (function () {
     var ds = function (identifier, additionFn) {
-        ////console.log(identifier);
         if (identifier === ':ll') {
             return ds.linkedlist();
         } else if (identifier === ":st") {
@@ -26,17 +25,17 @@ var $d = (function () {
         this.previous = previous;
     };
 
+    ///////////////////////////////  LINKED LIST ///////////////////////////////////////////
+                                 //  ----------- //
+
     /**
      * LinkedList
      * @param {[[Type]]} val [[Description]]
      */
 
-    function LinkedList(val) {
-        ////console.log(val);
-        if (val !== undefined) {
-            this.root = new Node(val);
-            this.nextNode = this.root;
-        }
+    function LinkedList(comparator) {
+        this.comparator = comparator;
+        this.root;
     };
 
     LinkedList.prototype.addToLast = function (val) {
@@ -50,8 +49,6 @@ var $d = (function () {
             }
             tmpNode.next = newNode;
         }
-        this.nextNode = this.root;
-        // return this;
     };
 
     LinkedList.prototype.addAtFirst = function (val) {
@@ -59,20 +56,20 @@ var $d = (function () {
         newNode.next = this.root;
         this.root = newNode;
         this.nextNode = this.root;
-        //  return this;
     };
 
-    LinkedList.prototype.moveToFirst = function () {
-        this.nextNode = this.root;
-    };
-
-    LinkedList.prototype.next = function () {
-        var value;
-        if (this.nextNode !== undefined) {
-            value = this.nextNode.val;
-            this.nextNode = this.nextNode.next;
+    LinkedList.prototype.iterator = function () {
+        var  nextNode = this.root;
+        function next(){
+            var value;
+             if (nextNode !== undefined) {
+                 value = nextNode.val;
+                 nextNode = nextNode.next;
+            }
+            return value;
         }
-        return value;
+
+        return {next : next};
     };
     LinkedList.prototype.size = function () {
         var size = 0;
@@ -83,6 +80,10 @@ var $d = (function () {
         }
         return size;
     };
+
+
+///////////////////////////////   STACK   ///////////////////////////////////////////
+                          //   ----------- //
     /**
      * Stack
      * @param {[[Type]]} comparator [[Description]]
@@ -97,6 +98,10 @@ var $d = (function () {
         }
     };
 
+    Stack.prototype.isEmpty = function(){
+      return this.stackArray.length === 0 ? true : false;
+    };
+
     Stack.prototype.pop = function () {
         return this.stackArray.pop();
     };
@@ -109,6 +114,8 @@ var $d = (function () {
         return this.stackArray.length;
     };
 
+ ///////////////////////////////   QUEUE    ///////////////////////////////////////////
+                          //   ----------- //
     /**
      * Queue
      * @param {[[Type]]} comparator [[Description]]
@@ -149,6 +156,9 @@ var $d = (function () {
         return contained;
     };
 
+
+ ///////////////////////////////  BINARY SEARCH TREE  ///////////////////////////////////////////
+                            //  --------------------- //
     /**
      * BinarySearchTree
      * @param {[[Type]]} comparatorFn [[Description]]
@@ -202,7 +212,6 @@ var $d = (function () {
         if (equals(rootNode.val, remVal)) {
             // ROOT NEED TO BE REMOVED   
             sNode = rootNode;
-            //console.log("ITS A ROOT NODE : " + sNode.val);
         } else {
             preorder(rootNode);
         }
@@ -294,7 +303,8 @@ var $d = (function () {
     };
 
 
-
+ ///////////////////////////////   GRAPH   ///////////////////////////////////////////
+                            // ------------ //
     /**
      * Graph
      * @param {[[Type]]} vertex [[Description]]
@@ -340,12 +350,7 @@ var $d = (function () {
     Graph.prototype.print = function () {
         for (var ver in this.vertexList) {
             var v = this.vertexList[ver];
-            // console.log("Adjacent to vert: " + v.value);
             var adVer = this.adjacancyList.getAdjacentVertexes(v);
-            /* for (var vv in adVer) {
-                console.log("---" + adVer[vv].value);
-            }
-*/
         }
     };
 
@@ -456,6 +461,9 @@ var $d = (function () {
         ////console.log(this.vertex.value + "   adjVer:" + adjVer.value);
         this.adjacentVertexes.push(adjVer);
     };
+
+     ///////////////////////////////  SORTER  ///////////////////////////////////////////
+                                // ----------- //
 
     /**
      * SORTING ALGORITHIMS
@@ -624,6 +632,8 @@ var $d = (function () {
 
     }
 
+    ///////////////////////////////    HEAP   ///////////////////////////////////////////
+                                // ----------- //
 
     /**
      * HEAP
@@ -678,16 +688,14 @@ var $d = (function () {
         var min = array[0];
         var last = array[array.length - 1];
         var v = array.splice(array.length - 1, 1);
-
-
-        //   log("last :" + last + "  v: " + v);
         array[0] = last;
         this.heapify(1);
         return min;
     };
 
 
-
+ ///////////////////////////////   TRIE   ///////////////////////////////////////////
+                            // ----------- //
     /**
      * Tries
      * @param {[[Type]]} text [[Description]]
@@ -864,3 +872,5 @@ var $d = (function () {
     return ds;
 
 })();
+
+module.exports = $d;
