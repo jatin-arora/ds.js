@@ -82,59 +82,6 @@ var $d = (function () {
     };
 
 
-///////////////////////////////   XOR LinkedList   ///////////////////////////////////////////
-                             // ------------------ //
-
-
-    /**
-     * XORLinkedList
-     * @param {[[Type]]} val [[Description]]
-     */
-
-    function XORLinkedList(comparator) {
-        this.comparator = comparator;
-        this.root;
-    };
-
-    XORLinkedList.prototype.add = function(value){
-        var newNode = new Node(value);
-        if( this.root === undefined){
-             this.root = newNode;
-        }else{
-            var nxtNode = this.root, prevNode;
-            while(nxtNode.next !== undefined){
-                prevNode = nxtNode;
-                nxtNode = nxtNode.next;
-            }
-            nxtNode.next = newNode;
-            nxtNode.previous = prevNode ^ newNode;
-            newNode.previous = nxtNode ^ undefined;
-            log( " nxtNode "+nxtNode.previous+"    newNode "+newNode.previous);
-        }
-
-    };
-
-    XORLinkedList.prototype.iterator = function(){
-
-        var sNode = this.root;
-
-        function next(){
-            var value = sNode.val;
-            sNode = sNode.next;
-            log("'--------val --------"+value)
-            return value;
-        };
-
-        function previous(){
-             log("previous val===================> "+sNode.val+"    sNode.previous>  "+sNode.previous);
-            sNode = sNode ^ sNode.previous;
-             log("previous val===================>>>>>>>>>>> "+sNode.val);
-            var value = sNode.val;
-            return value;
-        }
-
-        return {next : next, previous : previous};
-    }
 
 ///////////////////////////////   STACK   ///////////////////////////////////////////
                           //   ----------- //
@@ -257,7 +204,7 @@ var $d = (function () {
 
     };
 
-    BinarySearchTree.prototype.delete = function (remVal) {
+    BinarySearchTree.prototype.deleteVal = function (remVal) {
         var rootNode = this.root;
         var compFn = this.compareFn;
 
@@ -307,7 +254,7 @@ var $d = (function () {
         if (sNode !== undefined) {
             if (sNode.previous !== undefined && sNode.next !== undefined) {
                 var sucessorNode = sucessor(sNode);
-                this.delete(sucessorNode.val);
+                this.deleteVal(sucessorNode.val);
 
                 if (pNode !== undefined) {
                     if (equals(pNode.previous.val, sNode.val)) {
