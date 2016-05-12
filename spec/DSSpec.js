@@ -34,21 +34,7 @@ describe("Data Structure Liabrary", function () {
         expect(list.size()).toBe(2);
     });
 
-     it("Create XORLinkedList with initial value", function () {
-        //Arrange
-
-        //Act
-        var list = $d.xorlinkedlist();
-         list.add(1);
-         list.add(2);
-         list.add(3);
-        var iterator = list.iterator();
-        //Assert
-        expect(iterator.next()).toBe(1);
-        expect(iterator.next()).toBe(2);
-       // expect(iterator.next()).toBe(3);
-        expect(iterator.previous()).toBe(3);
-    });
+     
 
     it("Create Stack with keyword", function () {
         //Arrange
@@ -219,7 +205,7 @@ describe("Data Structure Liabrary", function () {
         bt.add(20);
         bt.add(25);
         // console.log(bt.inorder());
-        var list = bt.delete(7);
+        var list = bt.deleteVal(7);
         //console.log("after remove: " + bt.inorder());
 
         /* var list = bt.remove(7);
@@ -227,7 +213,7 @@ describe("Data Structure Liabrary", function () {
         // var list = bt.remove(12);
         //console.log("after remove: " + bt.inorder());
 
-        var list = bt.delete(10);
+        var list = bt.deleteVal(10);
         //console.log("after remove: " + bt.inorder());
 
 
